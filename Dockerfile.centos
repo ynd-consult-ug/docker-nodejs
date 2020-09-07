@@ -1,0 +1,21 @@
+FROM centos:%%DISTRO_VERSION%%
+
+RUN curl -sL https://rpm.nodesource.com/setup_%%NODE_VERSION%%.x | bash -
+
+RUN yum install -q -y epel-release && \
+  yum -q -y install \
+  bash \
+  ca-certificates \
+  curl \
+  bc \
+  gcc-c++ \
+  git \
+  jq \
+  file \
+  make \
+  nodejs \
+  postgresql \
+  which && \
+  useradd -d /node -m -u 998 node
+
+USER 998

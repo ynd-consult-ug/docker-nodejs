@@ -1,0 +1,25 @@
+#!/bin/bash
+# Script is used to generate all the necessary Dockerfiles based on the templates
+
+declare -a node_versions=("10" "12" "14")
+declare -a distributions=("centos:8")
+
+for i in "${distributions[@]}"
+do
+  DISTRO_NAME="$(cut -d ':' -f1 <<< $i)"
+  DISTRO_VERSION="$(cut -d ':' -f2 <<< $i)"
+
+  for j in "${node_versions[@]}"
+  do
+    # E.g. ./alpine/3.11/2.5.3
+    TARGET_DIR="./generated/$DISTRO_NAME/$DISTRO_VERSION/$j"
+    
+    mkdir -p $TARGET_DIR
+    cp ./Dockerfile.$DISTRO_NAME $TARGET_DIR/Dockerfile
+
+    sed -i "s/%%NODE_VERSION%%/$j/g" $TARGET_DIR/Dockerfile
+    sed -i "s/%%DISTRO_VERSION%%/$DISTRO_VERSION/g" $TARGET_DIR/Dockerfile
+  done
+done
+
+git add ./generated

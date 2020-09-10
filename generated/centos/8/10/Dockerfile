@@ -16,6 +16,8 @@ RUN yum install -q -y epel-release && \
   nodejs \
   postgresql \
   which && \
-  useradd -d /node -m -u 998 node
+  useradd -d /node -m -u 998 node && \
+  mkdir -p /app && \
+  chown 998:998 /app
 
 USER 998

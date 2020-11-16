@@ -1,9 +1,13 @@
 FROM centos:%%DISTRO_VERSION%%
 
-RUN curl -sL https://rpm.nodesource.com/setup_%%NODE_VERSION%%.x | bash -
+SHELL [ "/bin/bash", "-l", "-c"]
+
+RUN set -o pipefail && \
+  curl -sL https://rpm.nodesource.com/setup_%%NODE_VERSION%%.x | bash -
 
 RUN yum install -q -y epel-release && \
   yum -q -y install \
+  autoconf \
   bash \
   ca-certificates \
   curl \
@@ -11,6 +15,7 @@ RUN yum install -q -y epel-release && \
   gcc-c++ \
   git \
   jq \
+  libglvnd-glx \
   file \
   make \
   nodejs \
@@ -18,6 +23,7 @@ RUN yum install -q -y epel-release && \
   which && \
   useradd -d /node -m -u 1000 node && \
   mkdir -p /app && \
-  chown 1000:1000 /app
+  chown 1000:1000 /app && \
+  yum clean all
 
 USER 1000

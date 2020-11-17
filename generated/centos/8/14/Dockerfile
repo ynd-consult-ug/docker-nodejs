@@ -8,6 +8,7 @@ RUN set -o pipefail && \
 RUN yum install -q -y epel-release && \
   yum -q -y install \
   autoconf \
+  automake \
   bash \
   ca-certificates \
   curl \

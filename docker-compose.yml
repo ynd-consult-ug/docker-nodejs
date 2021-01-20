@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+  node10:
+    build:
+      context: .
+      args:
+        DISTRO_VERSION: 8
+        NODE_VERSION: 10
+      dockerfile: Dockerfile
+    image: yndconsult/docker-nodejs:10
+
+  node12:
+    build:
+      context: .
+      args:
+        DISTRO_VERSION: 8
+        NODE_VERSION: 12
+      dockerfile: Dockerfile
+    image: yndconsult/docker-nodejs:12
+
+  node14:
+    build:
+      context: .
+      args:
+        DISTRO_VERSION: 8
+        NODE_VERSION: 14
+      dockerfile: Dockerfile
+    image: yndconsult/docker-nodejs:14

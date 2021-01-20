@@ -1,14 +1,10 @@
 #!groovy
 
-IMAGE_BASENAME = 'yndconsult/docker-ruby:'
+IMAGE_BASENAME = 'yndconsult/docker-nodejs:'
 NODE_VERSIONS  = [
   '10',
   '12',
   '14'
-]
-
-CENTOS_VERSIONS = [
-  '8'
 ]
 
 node('ynd') {
@@ -17,17 +13,14 @@ node('ynd') {
   }
 
   withDockerRegistry(credentialsId: 'hub.docker.com') {
-    CENTOS_VERSIONS.each{ os ->
-      NODE_VERSIONS.each { version ->
-        IMAGE_NAME = "${IMAGE_BASENAME}${version}"
-        stage(IMAGE_NAME) {
-          sh "docker build -t ${IMAGE_NAME} -f Dockerfile" +
-          " --build-arg DISTRO_VERSION=${os}" +
-          " --build-arg NODE_VERSION=${version} ."
-        }
-        stage("Push ${IMAGE_NAME}") {
-          sh "docker push ${IMAGE_NAME}"
-        }
+    NODE_VERSIONS.each { version ->
+      COMPOSE_COMMAND = 'docker-compose -f docker-compose.yml -p docker-nodejs'
+      IMAGE_NAME = "node${version}"
+      stage(IMAGE_NAME) {
+        sh "${COMPOSE_COMMAND} build ${IMAGE_NAME}"
+      }
+      stage("Push ${IMAGE_NAME}") {
+        sh "${COMPOSE_COMMAND} push ${IMAGE_NAME}"
       }
     }
   }

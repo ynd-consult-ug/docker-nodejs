@@ -9,7 +9,7 @@ NODE_VERSIONS  = [
 
 node('ynd') {
   stage('Fetch code') {
-    GIT = utils.checkoutRepository('git@github.com:ynd-consult-ug/docker-node.git')
+    GIT = utils.checkoutRepository('git@github.com:ynd-consult-ug/docker-nodejs.git')
   }
 
   withDockerRegistry(credentialsId: 'hub.docker.com') {

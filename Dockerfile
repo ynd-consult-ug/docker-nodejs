@@ -31,5 +31,5 @@ RUN dnf update -q -y && \
   dnf clean all
 
 ENV CYPRESS_CACHE_FOLDER=/tmp/.cache
-RUN npm install --quiet -g cypress@^5.4
+RUN npm install --quiet -g cypress@^5.4 >> /dev/null
 

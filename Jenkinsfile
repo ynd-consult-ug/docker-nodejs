@@ -22,21 +22,23 @@ node('ynd') {
       }
       error "Hadolint checks failed. ${err}" 
   }
-
-  withDockerRegistry(credentialsId: 'hub.docker.com') {
-    NODE_VERSIONS.each { version ->
-      COMPOSE_COMMAND = 'docker-compose -f docker-compose.yml -p docker-nodejs'
-      IMAGE_NAME = "node${version}"
-      stage(IMAGE_NAME) {
-        sh "${COMPOSE_COMMAND} build ${IMAGE_NAME}"
-      }
-      stage("Push ${IMAGE_NAME}") {
-        sh "${COMPOSE_COMMAND} push ${IMAGE_NAME}"
+  
+  if(env.BRANCH_NAME == 'master') {
+    withDockerRegistry(credentialsId: 'hub.docker.com') {
+      NODE_VERSIONS.each { version ->
+        COMPOSE_COMMAND = 'docker-compose -f docker-compose.yml -p docker-nodejs'
+        IMAGE_NAME = "node${version}"
+        stage(IMAGE_NAME) {
+          sh "${COMPOSE_COMMAND} build ${IMAGE_NAME}"
+        }
+        stage("Push ${IMAGE_NAME}") {
+          sh "${COMPOSE_COMMAND} push ${IMAGE_NAME}"
+        }
       }
     }
-  }
 
-  stage('Cleanup') {
-    cleanWs()
+    stage('Cleanup') {
+      cleanWs()
+    }
   }
 }

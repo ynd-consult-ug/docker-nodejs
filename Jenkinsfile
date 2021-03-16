@@ -1,4 +1,13 @@
 #!groovy
+properties([
+  buildDiscarder(
+    logRotator(numToKeepStr: '5')
+  ),
+  disableResume(),
+  pipelineTriggers([
+    githubPush(),
+  ])
+])
 
 IMAGE_BASENAME = 'yndconsult/docker-nodejs:'
 NODE_VERSIONS  = [
@@ -22,7 +31,7 @@ node('ynd') {
       }
       error "Hadolint checks failed. ${err}" 
   }
-  
+
   if(env.BRANCH_NAME == 'master') {
     withDockerRegistry(credentialsId: 'hub.docker.com') {
       NODE_VERSIONS.each { version ->

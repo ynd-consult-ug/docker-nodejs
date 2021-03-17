@@ -21,6 +21,8 @@ node('ynd') {
     GIT = utils.checkoutRepository('git@github.com:ynd-consult-ug/docker-nodejs.git')
   }
 
+  TAG  = (new Date()).format('YYYYMMdd')
+
   try {
     stage('Hadolint checks') {
       security.hadolintChecks('Dockerfile')
@@ -43,6 +45,14 @@ node('ynd') {
         stage("Push ${IMAGE_NAME}") {
           sh "${COMPOSE_COMMAND} push ${IMAGE_NAME}"
         }
+      }
+    }
+
+    stage('Create tag in git') {
+      if(!git.tagExists(TAG)) {
+        git.pushTag(TAG)
+      } else {
+        echo 'Not pushing tag as it already exists'
       }
     }
 

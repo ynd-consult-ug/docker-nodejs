@@ -25,7 +25,7 @@ node('ynd') {
 
   try {
     stage('Hadolint checks') {
-      security.hadolintChecks('Dockerfile')
+      security.hadolintChecks('Dockerfile', 'hadolint-jenkins.yaml')
     }
   } catch(err) {
       stage('Send slack notification') {

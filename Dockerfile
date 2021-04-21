@@ -32,4 +32,4 @@ RUN dnf update -q -y && \
 
 ENV CYPRESS_CACHE_FOLDER=/tmp/.cache
 RUN npm install --quiet -g cypress@^5.4 >> /dev/null
-
+RUN rm -rf /tmp/.cache
